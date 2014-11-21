@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+    
+<EditText
+        android:id="@+id/rName"
+        android:layout_width="match_parent"
+        android:labelFor="@+id/textView1"
+        android:layout_height="wrap_content"
+        android:hint="Name"
+        android:ems="10" >
+
+        <requestFocus />
+    </EditText>
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="     From             To           Range"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" 
+        android:layout_marginTop="-30dp"
+        >
+
+        <NumberPicker
+            android:id="@+id/numberPicker1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleX="0.7"
+			android:scaleY="0.7"
+             />
+        
+		<NumberPicker
+            android:id="@+id/numberPicker2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/numberPicker1"
+            android:layout_alignBottom="@+id/numberPicker1"
+            android:layout_toRightOf="@+id/numberPicker1"
+            android:layout_marginLeft="-20dp"
+            android:scaleX="0.7"
+			android:scaleY="0.7" />
+		
+        <NumberPicker
+            android:id="@+id/numberPicker3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/numberPicker2"
+            android:scaleX="0.7"
+			android:scaleY="0.7" />
+        
+        <NumberPicker
+            android:id="@+id/numberPicker4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/numberPicker3"
+            android:layout_marginLeft="-20dp"
+            android:scaleX="0.7"
+			android:scaleY="0.7" />
+
+        <NumberPicker
+            android:id="@+id/numberPicker5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="13dp"
+            android:scaleX="0.8"
+			android:scaleY="0.8" />
+        
+
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Days"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <RelativeLayout
+        android:layout_width="323dp"
+        android:layout_height="100dp"
+        android:layout_weight="0.10" 
+        android:layout_marginLeft="20dp"
+        >
+
+        <CheckBox
+            android:id="@+id/checkBox1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sun" />
+
+        <CheckBox
+            android:id="@+id/checkBox3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/checkBox2"
+            android:text="Tue" />
+
+        <CheckBox
+            android:id="@+id/checkBox4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/checkBox3"
+            android:text="Wed" />
+
+        <CheckBox
+            android:id="@+id/checkBox5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:text="Thu" />
+
+        <CheckBox
+            android:id="@+id/checkBox6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/checkBox5"
+            android:layout_alignBottom="@+id/checkBox5"
+            android:layout_alignLeft="@+id/checkBox2"
+            android:text="Fri" />
+
+        <CheckBox
+            android:id="@+id/checkBox7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/checkBox6"
+            android:layout_alignBottom="@+id/checkBox6"
+            android:layout_toRightOf="@+id/checkBox6"
+            android:text="Sat" />
+
+        <CheckBox
+            android:id="@+id/checkBox2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/checkBox5"
+            android:text="Mon" />
+
+    </RelativeLayout>
+
+</LinearLayout>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">KidsTracker</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+        <string-array name="planets_array">
+        <item>Status</item>
+        <item>Map</item>
+        <item>Regions</item>
+        <item>History</item>
+        <item>Settings</item>
+    </string-array>
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+	 <style name="DefaultButtonText">
+	   <item name="android:layout_width">fill_parent</item>
+	    <item name="android:layout_height">wrap_content</item>
+	    <item name="android:textColor">#ffffff</item>
+	    <item name="android:gravity">center</item>
+	    <item name="android:layout_margin">3dp</item>
+	    <item name="android:textStyle">normal</item>
+	    <item name="android:textSize">20sp</item>
+	</style>
+</resources>
