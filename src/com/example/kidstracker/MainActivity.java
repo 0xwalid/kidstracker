@@ -1,10 +1,12 @@
 package com.example.kidstracker;
 
+import android.app.ActivityManager;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.app.Activity;
+import android.app.ActivityManager.RunningServiceInfo;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -71,13 +73,24 @@ public class MainActivity extends Activity {
                 invalidateOptionsMenu();
             }
         };
-        displayView(0);
+        Bundle extras = getIntent().getExtras();
+        if(extras !=null) {
+            boolean value = extras.getBoolean("map");
+            if (value) {
+            	displayView(1);
+            } else {
+            	displayView(0);
+            }
+        } else {
+        	displayView(0);
+        }
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         mDrawerList.setOnItemClickListener(new SlideMenuClickListener());
         
         Intent intent = new Intent(MainActivity.this,
                 MapService.class);
         startService(intent);
+        PreferenceManager.setDefaultValues(this, R.layout.settings, false);
 	}
 	
     private class SlideMenuClickListener implements ListView.OnItemClickListener {
@@ -106,15 +119,21 @@ public class MainActivity extends Activity {
             fragment = new MapsFragment();
             reg = true;
             break;
-//        case 3:
-//            fragment = new CommunityFragment();
-//            break;
-//        case 4:
-//            fragment = new PagesFragment();
-//            break;
-//        case 5:
-//            fragment = new WhatsHotFragment();
-//            break;
+        case 3:
+            fragment = new HistoryFragment();
+            break;
+        case 4:
+            fragment = new UserSettings();
+            break;
+        case 5:
+			Intent login = new Intent(this, LoginActivity.class);
+			startActivity(login);
+			if (isServiceRunning()) {
+				stopService();
+			}
+            PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putBoolean("logged_in", false).commit();
+			finish(); 
+			return;
  
         default:
             break;
@@ -189,5 +208,30 @@ public class MainActivity extends Activity {
         // Pass any configuration change to the drawer toggls
         mDrawerToggle.onConfigurationChanged(newConfig);
     }
+    
+	public Boolean isServiceRunning() {
+		ActivityManager manager = (ActivityManager) this
+				.getSystemService(this.ACTIVITY_SERVICE);
+		for (RunningServiceInfo service : manager
+				.getRunningServices(Integer.MAX_VALUE)) {
+			if (MapService.class.getName().equals(service.service.getClassName())) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public void startService() {
+		Intent serviceIntent = new Intent(this, MapService.class);
+		if (isServiceRunning()) {
+			this.startService(serviceIntent);
+		}
+		this.startService(serviceIntent);
+	}
+
+	public void stopService() {
+		Intent serviceIntent = new Intent(this, MapService.class);
+		this.stopService(serviceIntent);
+	}
 
 }

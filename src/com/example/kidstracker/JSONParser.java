@@ -35,6 +35,7 @@ public class JSONParser {
     public JSONObject getJSONFromUrl(String url, List<NameValuePair> params) {
 
         // Making HTTP request
+    	jObj = null;
         try {
             // defaultHttpClient
             DefaultHttpClient httpClient = new DefaultHttpClient();

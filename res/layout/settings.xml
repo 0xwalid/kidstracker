@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+ <PreferenceCategory
+   android:summary="Notifcations Period"
+   android:title="Notifcations" >
+  <CheckBoxPreference
+     android:key="periodic_notification"
+     android:summary="Notify me each hour"
+     android:title="Perdiodic Notifications" />
+  <CheckBoxPreference
+     android:key="alert_notification"
+     android:summary="When the kid is out of the expected zone"
+     android:title="Alert Notifications"
+     android:defaultValue="true"
+      />
+ </PreferenceCategory>
+ 
+ <PreferenceCategory
+   android:summary="Username and password information"
+   android:title="Application" >
+  <CheckBoxPreference
+     android:key="deactivate"
+     android:summary="Stop recieving notifications and retrieving location updates"
+     android:title="Deactivate" />
+
+ </PreferenceCategory>
+</PreferenceScreen>

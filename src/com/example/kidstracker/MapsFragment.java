@@ -7,6 +7,7 @@ import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
+import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -35,6 +36,7 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.NumberPicker;
+import android.widget.Toast;
 
 public class MapsFragment extends Fragment {
 
@@ -68,7 +70,7 @@ public class MapsFragment extends Fragment {
 			        	    @Override
 			        	    public void onMapClick(LatLng point) {
 			        	    	clickedPoint = point;
-			        	    	Dialog d = createDialog();
+			        	    	Dialog d = createDialog(false, 0);
 			        	    	d.show();
 
 			        	        final NumberPicker np1 = (NumberPicker) d.findViewById(R.id.numberPicker1);
@@ -89,6 +91,58 @@ public class MapsFragment extends Fragment {
 				        	     
 			        	    }
 			         });
+			         
+			         map.setOnMarkerClickListener(new OnMarkerClickListener() {
+						
+						@Override
+						public boolean onMarkerClick(final Marker marker) {
+							String name = marker.getTitle();
+							final DBHelper db = new DBHelper(getActivity());
+							final Region region = db.getRegion("r_name", name);
+							
+							AlertDialog  alertDialog = new AlertDialog.Builder(getActivity()).create();
+
+						    alertDialog.setTitle("Dialog Options");
+
+						    alertDialog.setMessage("Choose one of the options:");
+
+						    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Edit Region", new DialogInterface.OnClickListener() {
+
+						      public void onClick(DialogInterface dialog, int id) {
+
+						        
+						        LayoutInflater inflater = getActivity().getLayoutInflater();
+						        final View dd = inflater.inflate(R.layout.dialog, null);
+						        
+		
+					        	   createDialog(true, region.id).show();
+						    } }); 
+
+						    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Delete Region", new DialogInterface.OnClickListener() {
+
+						      public void onClick(DialogInterface dialog, int id) {
+
+						    	  db.deleteRegion(region.id);
+						    	  marker.remove();
+						          Toast.makeText(getActivity(), "Deleted Successfully", Toast.LENGTH_SHORT).show();
+						        
+
+						    }}); 
+
+						    alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
+
+						      public void onClick(DialogInterface dialog, int id) {
+
+						        //...
+
+						    }});
+						    
+						    alertDialog.show();
+
+							
+							return false;
+						}
+					});
 		         } else {
 		        	 map.setOnMapClickListener(null);
 		         }
@@ -101,7 +155,7 @@ public class MapsFragment extends Fragment {
     }
     
     
-    public Dialog createDialog() {
+    public Dialog createDialog(Boolean edit, int id) {
     	final ArrayList mSelectedItems = new ArrayList();  // Where we track the selected items
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         // Set the dialog title    LayoutInflater inflater = getActivity().getLayoutInflater();
@@ -109,12 +163,49 @@ public class MapsFragment extends Fragment {
         // Inflate and set the layout for the dialog
         LayoutInflater inflater = getActivity().getLayoutInflater();
         final View dd = inflater.inflate(R.layout.dialog, null);
+        if (edit) {
+        	final DBHelper db = new DBHelper(getActivity());
+			final Region region = db.getRegion("id", String.valueOf(id));
+     	   EditText mEdit   = (EditText) dd.findViewById(R.id.rName);
+    	   
+    	   mEdit.setText(region.name);
+	       NumberPicker np1 = (NumberPicker) dd.findViewById(R.id.numberPicker1);
+	       NumberPicker np2 = (NumberPicker) dd.findViewById(R.id.numberPicker2);
+	       NumberPicker np3 = (NumberPicker) dd.findViewById(R.id.numberPicker3);
+	       NumberPicker np4 = (NumberPicker) dd.findViewById(R.id.numberPicker4);
+	       NumberPicker np5 = (NumberPicker) dd.findViewById(R.id.numberPicker5);
+	         np1.setMaxValue(24);
+	         np1.setMinValue(1);
+	         np2.setMaxValue(59);
+	         np2.setMinValue(0);
+    	     np3.setMaxValue(24);
+    	     np3.setMinValue(1);
+    	     np4.setMaxValue(59);
+    	     np4.setMinValue(0);
+    	     np5.setMaxValue(500);
+    	     np5.setMinValue(1);
+	       np1.setValue(Integer.parseInt(region.from.split(":")[0]));
+	       np2.setValue(Integer.parseInt(region.from.split(":")[1]));
+	       np3.setValue(Integer.parseInt(region.to.split(":")[0]));
+	       np4.setValue(Integer.parseInt(region.to.split(":")[1]));
+	       np5.setValue(region.radius);
+    	   for (int i = 1; i <= 7; i++) {
+    		   int resID = dd.getResources().getIdentifier("checkBox"+i,
+    				    "id", getActivity().getPackageName());
+    		   CheckBox check = (CheckBox) dd.findViewById(resID);
+    		   if (region.days.charAt(i-1) == '1') {
+    			   check.setChecked(true);
+    		   }
+    	   }
+    	   
+        }
         builder.setView(dd);
 
-        builder.setTitle("Create Region")
+        builder.setTitle(edit ? "Create Region" : "Edit Region")
                .setPositiveButton("ok", new DialogInterface.OnClickListener() {
                    @Override
                    public void onClick(DialogInterface dialog, int id) {
+                	   
     				   Region region = new Region();
 
                 	   EditText mEdit   = (EditText) dd.findViewById(R.id.rName);

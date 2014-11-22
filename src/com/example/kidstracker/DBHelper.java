@@ -93,6 +93,13 @@ public class DBHelper extends SQLiteOpenHelper {
     db.close(); 
 	}
 	
+	public Integer deleteRegion (Integer id) {
+	      SQLiteDatabase db = this.getWritableDatabase();
+	      return db.delete("regions", 
+	      "id = ? ", 
+	      new String[] { Integer.toString(id) });
+	}
+	
 	public void reCreate(){
 		SQLiteDatabase db = this.getWritableDatabase();
 		db.execSQL("DROP TABLE IF EXISTS white_listed");
