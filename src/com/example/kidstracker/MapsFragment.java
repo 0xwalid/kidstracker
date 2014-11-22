@@ -1,7 +1,12 @@
 package com.example.kidstracker;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONObject;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -28,6 +33,7 @@ import android.content.IntentFilter;
 import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.InflateException;
 import android.view.LayoutInflater;
@@ -46,9 +52,11 @@ public class MapsFragment extends Fragment {
     private static Marker positionMarker;
     private LatLng clickedPoint;
     MyReceiver myReceiver;
+    String serverUrl;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    	serverUrl = getResources().getString(R.string.host);
         if (view != null) {
             ViewGroup parent = (ViewGroup) view.getParent();
             if (parent != null)
@@ -97,6 +105,8 @@ public class MapsFragment extends Fragment {
 						@Override
 						public boolean onMarkerClick(final Marker marker) {
 							String name = marker.getTitle();
+							if (name.equals("kid")) return false;
+							
 							final DBHelper db = new DBHelper(getActivity());
 							final Region region = db.getRegion("r_name", name);
 							
@@ -145,7 +155,21 @@ public class MapsFragment extends Fragment {
 					});
 		         } else {
 		        	 map.setOnMapClickListener(null);
+		        	 map.setOnMarkerClickListener(null);
 		         }
+		      }
+		      final DBHelper db = new DBHelper(getActivity());
+		      List<Region> regions = db.getAllRegions();
+		      for (Region region : regions) {
+		   		   LatLng positionLatLng = new LatLng(region.lat, region.lng);
+		   		   
+				   map.addMarker(new MarkerOptions().
+				   position(positionLatLng).title(region.name));
+				   
+				   CircleOptions circleOptions = new CircleOptions()
+				    .center(positionLatLng)
+				    .radius(region.radius); // In meters
+				   map.addCircle(circleOptions);
 		      }
 			  map.setMapType(GoogleMap.MAP_TYPE_HYBRID);  // set maptype to hybrid
 	      } catch (Exception e) {
@@ -155,7 +179,7 @@ public class MapsFragment extends Fragment {
     }
     
     
-    public Dialog createDialog(Boolean edit, int id) {
+    public Dialog createDialog(final Boolean edit, final int rid) {
     	final ArrayList mSelectedItems = new ArrayList();  // Where we track the selected items
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         // Set the dialog title    LayoutInflater inflater = getActivity().getLayoutInflater();
@@ -165,7 +189,7 @@ public class MapsFragment extends Fragment {
         final View dd = inflater.inflate(R.layout.dialog, null);
         if (edit) {
         	final DBHelper db = new DBHelper(getActivity());
-			final Region region = db.getRegion("id", String.valueOf(id));
+			final Region region = db.getRegion("id", String.valueOf(rid));
      	   EditText mEdit   = (EditText) dd.findViewById(R.id.rName);
     	   
     	   mEdit.setText(region.name);
@@ -205,7 +229,11 @@ public class MapsFragment extends Fragment {
                .setPositiveButton("ok", new DialogInterface.OnClickListener() {
                    @Override
                    public void onClick(DialogInterface dialog, int id) {
-                	   
+                	   if (edit) {
+                		   DBHelper db = new DBHelper(getActivity());
+               			   db.deleteRegion(rid);
+                	   }
+                		   
     				   Region region = new Region();
 
                 	   EditText mEdit   = (EditText) dd.findViewById(R.id.rName);
@@ -246,6 +274,11 @@ public class MapsFragment extends Fragment {
     				    .center(clickedPoint)
     				    .radius(np3.getValue()); // In meters
     				   map.addCircle(circleOptions);
+//    				   if (edit) {
+//    					   editRedion(region);
+//    				   } else {
+//    					   addRedion(region);
+//    				   }
                    }
                })
                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -299,14 +332,43 @@ public class MapsFragment extends Fragment {
 		   positionMarker = map.addMarker(new MarkerOptions().
 		   position(positionLatLng).title("Kid").icon(BitmapDescriptorFactory.fromResource(R.drawable.kma)));
 		   
-		   CircleOptions circleOptions = new CircleOptions()
-		    .center(positionLatLng)
-		    .radius(10); // In meters
-		   map.addCircle(circleOptions);
    	  }
    	 }
    	 
    	}
+    
+    
+    public void addRedion(Region region) {
+    	JSONParser jsonParser = new JSONParser();
+        // Building Parameters
+    	String user = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("user", "");
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("username", user));
+        params.add(new BasicNameValuePair("name", region.name));
+        params.add(new BasicNameValuePair("lat", String.valueOf(region.lat)));
+        params.add(new BasicNameValuePair("lng", String.valueOf(region.lng)));
+        params.add(new BasicNameValuePair("starts_at", region.from + ":00"));
+        params.add(new BasicNameValuePair("ends_at", region.to + ":00"));
+        params.add(new BasicNameValuePair("days", region.days));
+        params.add(new BasicNameValuePair("radius", String.valueOf(region.radius/1000)));
+        JSONObject json = jsonParser.getJSONFromUrl(serverUrl+ "/addRegion", params);
+    }
+
+    public void editRedion(Region region) {
+    	JSONParser jsonParser = new JSONParser();
+        // Building Parameters
+    	String user = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("user", "");
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("username", user));
+        params.add(new BasicNameValuePair("name", region.name));
+        params.add(new BasicNameValuePair("lat", String.valueOf(region.lat)));
+        params.add(new BasicNameValuePair("lng", String.valueOf(region.lng)));
+        params.add(new BasicNameValuePair("starts_at", region.from + ":00"));
+        params.add(new BasicNameValuePair("ends_at", region.to + ":00"));
+        params.add(new BasicNameValuePair("days", region.days));
+        params.add(new BasicNameValuePair("radius", String.valueOf(region.radius/1000)));
+        JSONObject json = jsonParser.getJSONFromUrl(serverUrl + "/editRegion", params);
+    }
 }
 
 

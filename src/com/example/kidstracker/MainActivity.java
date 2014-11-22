@@ -33,12 +33,12 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.side_menu);
-//		Boolean logged_in = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("logged_in", false);
-//		if (logged_in == false) {
-//			Intent login = new Intent(this, LoginActivity.class);
-//			startActivity(login);
-//			finish();
-//		}
+		Boolean logged_in = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("logged_in", false);
+		if (logged_in == false) {
+			Intent login = new Intent(this, LoginActivity.class);
+			startActivity(login);
+			finish();
+		}
 		
 //		if (savedInstanceState == null) {
 //			getSupportFragmentManager().beginTransaction()

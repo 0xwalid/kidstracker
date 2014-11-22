@@ -35,9 +35,8 @@ public class LoginActivity extends Activity {
 	Button btnLogin;
     EditText inputName;
     EditText inputPassword;
-    private TextView loginErrorMsg;
     private static String KEY_SUCCESS = "success";
-    private static String loginURL = "http://10.0.2.2:1337/user/login";
+    private static String loginURL;
     
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +45,7 @@ public class LoginActivity extends Activity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.login);
+        loginURL= getResources().getString(R.string.host) + "/login";
         inputName = (EditText) findViewById(R.id.etUserName);
         inputPassword = (EditText) findViewById(R.id.etPass);
         btnLogin = (Button) findViewById(R.id.btnSingIn);
@@ -137,7 +137,7 @@ public class LoginActivity extends Activity {
             }
             else{
                 nDialog.dismiss();
-                loginErrorMsg.setText("Error in Network Connection");
+                Toast.makeText(getApplicationContext(), "Error in Network Connection", 3000).show();
             }
         }
     }
@@ -161,8 +161,8 @@ public class LoginActivity extends Activity {
             
             
             pDialog = new ProgressDialog(LoginActivity.this);
-            pDialog.setTitle("Contacting Servers");
-            pDialog.setMessage("Logging in ...");
+            pDialog.setTitle("Contacting Server");
+            pDialog.setMessage("Logging in...");
             pDialog.setIndeterminate(false);
             pDialog.setCancelable(true);
             pDialog.show();
@@ -187,14 +187,15 @@ public class LoginActivity extends Activity {
                         pDialog.setTitle("Getting Data");
 //                        JSONObject json_user = json.getJSONObject("user");
                         PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putBoolean("logged_in", true).commit();
-                        
+                        PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putString("user", user).commit();
+
                        /**
                         *If JSON array details are stored in SQlite it launches the User Panel.
                         **/
-                        Intent upanel = new Intent(getApplicationContext(), MainActivity.class);
+                        Intent main = new Intent(getApplicationContext(), MainActivity.class);
 //                        upanel.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         pDialog.dismiss();
-                        startActivity(upanel);
+                        startActivity(main);
                         /**
                          * Close Login Screen
                          **/
@@ -202,7 +203,7 @@ public class LoginActivity extends Activity {
                     }else{
 
                         pDialog.dismiss();
-                        loginErrorMsg.setText("Incorrect username/password");
+                        Toast.makeText(getApplicationContext(), "Incorrect username/password", 3000).show();
                     }
                 }
             } catch (JSONException e) {
@@ -219,7 +220,7 @@ public class LoginActivity extends Activity {
     	JSONParser jsonParser = new JSONParser();
         // Building Parameters
         List<NameValuePair> params = new ArrayList<NameValuePair>();
-        params.add(new BasicNameValuePair("user_name", name));
+        params.add(new BasicNameValuePair("username", name));
         params.add(new BasicNameValuePair("password", password));
         JSONObject json = jsonParser.getJSONFromUrl(loginURL, params);
         return json;

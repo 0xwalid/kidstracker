@@ -101,8 +101,9 @@ public class MapService extends Service {
 		 @Override
 		 public void run() {
 		  // TODO Auto-generated method stub
-			 
-		  while(true && !PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean("deactivate", false)) {
+			 boolean deactivated = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean("deactivate", false);
+			 boolean logged_in = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean("logged_in", false);
+		  while(true && !deactivated && logged_in) {
 		   try {
 			   Intent intent = new Intent();
 			   intent.setAction(LOC_INFO);

@@ -16,40 +16,46 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="10dp"
-        android:layout_marginTop="180dp"
         >
 
-        
-    	<EditText 
-    	    	android:id="@+id/etUserName"
-	       	android:layout_width="match_parent"
-	       	android:layout_height="wrap_content"
-	      	android:background="@drawable/edittext_top_bg"
-	        android:padding="10dp"
-	        android:hint="User Name"
-	        android:textColorHint="#cccccc"
-	        android:drawableLeft="@drawable/user"/>
-    	<EditText 
-    	    	android:id="@+id/etPass"
-	       	android:layout_width="match_parent"
-	       	android:layout_height="wrap_content"
-	       	android:background="@drawable/edittext_bottom_bg"
-	       	android:layout_marginTop="-2dp"
-	        android:padding="10dp"
-	        android:hint="Password"
-	        android:textColorHint="#cccccc"
-	        android:password="true"
-	        android:drawableLeft="@drawable/password"/>
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="185dp"
+            android:layout_height="185dp"
+            android:layout_marginLeft="55dp"
+            android:layout_marginTop="-13dp"
+            android:adjustViewBounds="false"
+            android:src="@drawable/ktlogo" />
+      <EditText 
+            android:id="@+id/etUserName"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:background="@drawable/edittext_top_bg"
+          android:padding="10dp"
+          android:hint="User Name"
+          android:textColorHint="#cccccc"
+          android:drawableLeft="@drawable/user"/>
+      <EditText 
+            android:id="@+id/etPass"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:background="@drawable/edittext_bottom_bg"
+          android:layout_marginTop="-2dp"
+          android:padding="10dp"
+          android:hint="Password"
+          android:textColorHint="#cccccc"
+          android:password="true"
+          android:drawableLeft="@drawable/password"/>
         <Button 
-	       	android:id="@+id/btnSingIn"
-	       	android:layout_width="match_parent"
-	       	android:layout_height="wrap_content"
-	        android:padding="10dp"
-	        android:layout_margin="4dp"
-	       	android:text="Sign In"
-	        style="@style/DefaultButtonText"
-	       	android:background="@drawable/button_default_bg"
-	       />
+          android:id="@+id/btnSingIn"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:padding="10dp"
+          android:layout_margin="4dp"
+          android:text="Sign In"
+          style="@style/DefaultButtonText"
+          android:background="@drawable/button_default_bg"
+         />
         </LinearLayout>
 
 </RelativeLayout>

@@ -3,6 +3,7 @@
 
     <string name="app_name">KidsTracker</string>
     <string name="hello_world">Hello world!</string>
+    <string name="host">http://10.0.2.2:8999</string>
     <string name="action_settings">Settings</string>
         <string-array name="planets_array">
         <item>Status</item>
