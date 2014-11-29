@@ -22,6 +22,9 @@
      android:key="deactivate"
      android:summary="Stop recieving notifications and retrieving location updates"
      android:title="Deactivate" />
+  <EditTextPreference
+     android:key="kidname"
+     android:title="Kid name" />
 
  </PreferenceCategory>
 </PreferenceScreen>

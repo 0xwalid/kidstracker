@@ -7,8 +7,10 @@ import android.app.ActivityManager.RunningServiceInfo;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
+import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
+import android.preference.PreferenceManager;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
@@ -40,6 +42,19 @@ public class UserSettings extends PreferenceFragment {
 						} else {
 							startService();
 						}
+						return true;
+					}
+				});
+
+		final EditTextPreference edit = (EditTextPreference) (EditTextPreference) findPreference("kidname");
+		String kidName = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("kidname", "Kid");
+		edit.setSummary(kidName);
+		edit.setText(kidName);
+		edit.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+					@Override
+					public boolean onPreferenceChange(Preference preference,
+							Object newValue) {
+						edit.setSummary((String) newValue);
 						return true;
 					}
 				});

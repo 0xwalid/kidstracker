@@ -62,7 +62,7 @@ public class MapService extends Service {
 					sendNotif("Alert Notification", "The kid is in the zone: " + res.getString("region"));
 				}
 			} else {
-				if (time - lastnotified >= 3600 && res.getString("type").equals("green")) {
+				if (time - lastnotified >= 3600 && res.getString("type").equals("green") || res.getString("type").equals("green") && !lastcolor.equals("green")) {
 					PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putLong("last_notified", time).commit();
 					PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putString("last_color", "green").commit();
 					sendNotif("Periodic Notification", "The kid is in the expected zone: "+res.getString("region"));
@@ -108,9 +108,13 @@ public class MapService extends Service {
 			   Intent intent = new Intent();
 			   intent.setAction(LOC_INFO);
 			   JSONParser caller = new JSONParser();
-			   JSONObject res = caller.getJSONFromUrl("http://10.0.2.2:1337/user/getLocation", new ArrayList<NameValuePair>());
+				 String user = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString("user", "");
+
+			   JSONObject res = caller.getReq("http://10.0.2.2:8999/getLocation/" + user);
 			   try {
 				   if(res != null) {
+					   res.put("type", res.getString("zone_type"));
+					   res.put("region", res.getString("region_name"));
 					   Log.i("kt", res.toString());
 			           long time = System.currentTimeMillis()/1000;
 					   PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putLong("last_checked", time).commit();

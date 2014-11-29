@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">KidsTracker</string>
+    <string name="app_name">Eye On Kid</string>
     <string name="hello_world">Hello world!</string>
     <string name="host">http://10.0.2.2:8999</string>
     <string name="action_settings">Settings</string>

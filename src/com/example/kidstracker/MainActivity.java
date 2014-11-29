@@ -62,7 +62,7 @@ public class MainActivity extends Activity {
                 R.string.app_name // nav drawer close - description for accessibility
         ){
             public void onDrawerClosed(View view) {
-                getActionBar().setTitle("Kids Tracker");
+                getActionBar().setTitle("Eye On Kid");
                 // calling onPrepareOptionsMenu() to show action bar icons
                 invalidateOptionsMenu();
             }
