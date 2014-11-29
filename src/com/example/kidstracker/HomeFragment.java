@@ -76,7 +76,6 @@ public class HomeFragment extends Fragment {
 			long last_checked = PreferenceManager.getDefaultSharedPreferences(getActivity()).getLong("last_checked", 0);
 			Calendar cal = Calendar.getInstance(Locale.ENGLISH);
 			long time = System.currentTimeMillis()/1000;
-			//					String region = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("region", "retreiving..");
 			cal.setTimeInMillis(last_checked*1000);
 			String date = DateFormat.format("dd/MM hh:mm:ss", cal).toString();
 			if (time - last_checked < 10) {

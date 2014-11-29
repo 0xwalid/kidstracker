@@ -70,23 +70,6 @@ public class HistoryFragment extends Fragment {
                     public void onClick(DialogInterface dialog, int which) {
                         String strName = arrayAdapter.getItem(which);
                         days = strName.charAt(0);
-//                        AlertDialog.Builder builderInner = new AlertDialog.Builder(
-//                                getActivity());
-//                        builderInner.setMessage(strName);
-//                        builderInner.setTitle("Your Selected Item is");
-//                        builderInner.setPositiveButton("Ok",
-//                                new DialogInterface.OnClickListener() {
-//
-//                                    @Override
-//                                    public void onClick(
-//                                            DialogInterface dialog,
-//                                            int which) {
-//                                        
-//                                        new serverConnection().execute();
-//                                        dialog.dismiss();
-//                                    }
-//                                });
-//                        builderInner.show();
                     	
                     	new serverConnection().execute();
                     }
@@ -159,28 +142,22 @@ public class HistoryFragment extends Fragment {
                     for(int i = 0; i < json.length(); i++){
                     	 try {
  							String captureTime = json.getJSONObject(i).getString("capture_date");
- 							
- 							SimpleDateFormat  format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");  
-						    Date date = format.parse(captureTime);  
- 
-						    android.text.format.DateFormat df = new android.text.format.DateFormat();
-						    
+ 							captureTime = captureTime.substring(0, captureTime.length() - 10);
+ 							Log.i("kt", captureTime);
 						    
 							String region = json.getJSONObject(i).getString("region_name");
 							String zone = json.getJSONObject(i).getString("zone_type");
 							int color = 0;
-							if (zone == "green") {
+							if (zone.equals("green")) {
 								color = Color.GREEN;
-							} else if (zone == "gray") {
+							} else if (zone.equals("gray")) {
 								color = Color.GRAY;
-							} else {
+							} else if (zone.equals("red")) {
 								color = Color.RED;
+								region = "OUT";
 							}
-							addRow(df.format("yyyy-MM-dd hh:mm",date).toString(), region, color);
+							addRow(captureTime, region, color);
 						} catch (JSONException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						} catch (ParseException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
@@ -192,11 +169,7 @@ public class HistoryFragment extends Fragment {
                     
                 } else {
                 	pDialog.dismiss();
-//                	Toast.makeText(getActivity(), "Something wrong happend", 3000).show();
                 }
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
        }
     }     
 }

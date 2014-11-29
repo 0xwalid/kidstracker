@@ -109,8 +109,8 @@ public class MapService extends Service {
 			   intent.setAction(LOC_INFO);
 			   JSONParser caller = new JSONParser();
 				 String user = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString("user", "");
-
-			   JSONObject res = caller.getReq("http://10.0.2.2:8999/getLocation/" + user);
+				 String serverUrl = getResources().getString(R.string.host);
+			   JSONObject res = caller.getReq(serverUrl + "/getLocation/" + user);
 			   try {
 				   if(res != null) {
 					   res.put("type", res.getString("zone_type"));
