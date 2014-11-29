@@ -117,7 +117,6 @@ public class HistoryFragment extends Fragment {
             super.onPreExecute();
             pDialog = new ProgressDialog(getActivity());
             pDialog.setTitle("Contacting Server");
-
             pDialog.setMessage("Retrieving History...");
             pDialog.setIndeterminate(false);
             pDialog.setCancelable(true);
@@ -135,7 +134,6 @@ public class HistoryFragment extends Fragment {
 
         @Override
         protected void onPostExecute(JSONArray json) {
-//            try {
                if (json != null) {
 
                     Log.i("kt", json.toString());
@@ -164,7 +162,6 @@ public class HistoryFragment extends Fragment {
                     }
                     
                     pDialog.dismiss();
-                    
                     
                     
                 } else {
