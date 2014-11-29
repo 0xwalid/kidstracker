@@ -44,24 +44,26 @@ public class MapService extends Service {
 		try {
             long lastnotified = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getLong("last_notified", 0);
             String lastcolor = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString("last_color", "green");
+            Boolean periodic = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean("periodic_notification", true);
+            Boolean alert = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean("alert_notification", true);
             long time = System.currentTimeMillis()/1000;
 //            Log.i("kt", String.valueOf(time));
             if (lastnotified == 0) {
             	lastnotified = time;
             	PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putLong("last_notified", time).commit();
-            } else if (res.getString("type").equals("red")) {
+            } else if (alert && res.getString("type").equals("red")) {
 				if (time - lastnotified >= 180 || !lastcolor.equals("red")) {
 					PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putLong("last_notified", time).commit();
 					PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putString("last_color", "red").commit();
 					sendNotif("Alert Notification", "The kid is out of the allowed zones!");
 				}
-			} else if(res.getString("type").equals("gray")) {
+			} else if(alert && res.getString("type").equals("gray")) {
 				if (time - lastnotified >= 420  || !lastcolor.equals("gray")) {
 					PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putLong("last_notified", time).commit();
 					PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putString("last_color", "gray").commit();
 					sendNotif("Alert Notification", "The kid is in the zone: " + res.getString("region"));
 				}
-			} else {
+			} else if(periodic) {
 				if (time - lastnotified >= 3600 && res.getString("type").equals("green") || res.getString("type").equals("green") && !lastcolor.equals("green")) {
 					PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putLong("last_notified", time).commit();
 					PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putString("last_color", "green").commit();
