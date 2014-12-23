@@ -15,6 +15,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CircleOptions;
@@ -168,6 +169,7 @@ public class MapsFragment extends Fragment {
 		        	 map.setOnMarkerClickListener(null);
 		         }
 		      }
+		      MapsInitializer.initialize(getActivity());
 		      final DBHelper db = new DBHelper(getActivity());
 		      List<Region> regions = db.getAllRegions();
 		      for (Region region : regions) {
